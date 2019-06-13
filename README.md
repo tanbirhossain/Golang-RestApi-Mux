@@ -2,7 +2,7 @@
 
 ### Installation
 
-Installing the GORM, Gorilla Mux and MySQL package is fairly simple. You just need to run below three commands using GIT Bash or Putty:
+Installing the GORM, Gorilla Mux and MySQL package is fairly simple. You just need to run below three commands :
 
 ```
 go get -u github.com/gorilla/mux
