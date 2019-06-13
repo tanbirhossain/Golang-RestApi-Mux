@@ -17,11 +17,11 @@ type Post struct {
 	Content string `json:content`
 }
 
-//Get all books
-func getBooks(w http.ResponseWriter, r *http.Request) {
+//Get all Posts
+func getPosts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// json.NewEncoder(w).Encode(books)
+	// json.NewEncoder(w).Encode(Posts)
 
 	// database connection
 	db := gormConnect()
@@ -32,8 +32,8 @@ func getBooks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(posts)
 }
 
-//Get single Book
-func getBook(w http.ResponseWriter, r *http.Request) {
+//Get single Post
+func getPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r) //Get params
 	// database connection
@@ -47,22 +47,22 @@ func getBook(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//Create a new book
-func createBook(w http.ResponseWriter, r *http.Request) {
+//Create a new Post
+func createPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// database connection
 	db := gormConnect()
 	defer db.Close()
 	post := Post{}
-	// var book Book
+	// var Post Post
 	_ = json.NewDecoder(r.Body).Decode(&post)
 	db.Save(&post)
 	json.NewEncoder(w).Encode(post)
 
 }
 
-func updateBook(w http.ResponseWriter, r *http.Request) {
+func updatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r) //Get params
 	// database connection
@@ -75,7 +75,7 @@ func updateBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(post)
 
 }
-func deleteBook(w http.ResponseWriter, r *http.Request) {
+func deletePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r) //Get params
 
@@ -95,7 +95,6 @@ func gormConnect() *gorm.DB {
 	PASS := "123456789"
 	PROTOCOL := "tcp(127.0.0.1:3306)"
 	DBNAME := "go-mysql-crud"
-
 	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
 	db, err := gorm.Open(DBMS, CONNECT)
 
@@ -109,11 +108,11 @@ func routing() {
 	//int Router
 	r := mux.NewRouter()
 	//Router Handler / Endpoints chill
-	r.HandleFunc("/api/books", getBooks).Methods("GET")
-	r.HandleFunc("/api/books/{id}", getBook).Methods("GET")
-	r.HandleFunc("/api/books", createBook).Methods("POST")
-	r.HandleFunc("/api/books/{id}", updateBook).Methods("PUT")
-	r.HandleFunc("/api/books/{id}", deleteBook).Methods("DELETE")
+	r.HandleFunc("/api/posts", getPosts).Methods("GET")
+	r.HandleFunc("/api/posts/{id}", getPost).Methods("GET")
+	r.HandleFunc("/api/posts", createPost).Methods("POST")
+	r.HandleFunc("/api/posts/{id}", updatePost).Methods("PUT")
+	r.HandleFunc("/api/posts/{id}", deletePost).Methods("DELETE")
 
 	//listner
 	log.Fatal(http.ListenAndServe(":8000", r))
