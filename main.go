@@ -8,6 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 // Book struct (model)
@@ -85,8 +87,26 @@ func deleteBook(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(books)
 }
+func gormConnect() *gorm.DB {
+	DBMS := "mysql"
+	USER := "root"
+	PASS := "123456789"
+	PROTOCOL := "tcp(127.0.0.1:3306)"
+	DBNAME := "go-mysql-crud"
 
+	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
+	db, err := gorm.Open(DBMS, CONNECT)
+
+	if err != nil {
+		panic(err.Error())
+	}
+	return db
+}
 func main() {
+
+	// database connection
+	db := gormConnect()
+	defer db.Close()
 
 	//int Router
 	r := mux.NewRouter()
