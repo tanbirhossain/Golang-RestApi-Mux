@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -116,13 +117,15 @@ func routing() {
 
 	//listner
 	log.Fatal(http.ListenAndServe(":8000", r))
-
+}
 
 func main() {
 
 	// database connection
 	db := gormConnect()
 	defer db.Close()
+
+	fmt.Println("app started ....")
 	//declare all routing
 	routing()
 }
